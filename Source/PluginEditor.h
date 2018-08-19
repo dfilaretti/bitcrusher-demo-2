@@ -23,6 +23,7 @@ public:
 	typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 	typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
 	
+	// UI params
 	enum
 	{
 		paramControlHeight = 40,
