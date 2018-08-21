@@ -29,7 +29,8 @@ public:
 	{
 		paramControlHeight = 40,
 		paramLabelWidth = 100,
-		paramSliderWidth = 300
+		paramSliderWidth = 300, 
+		comboBoxWidth = 100
 	};
 
     BitCrusherAudioProcessorEditor (BitCrusherAudioProcessor&, AudioProcessorValueTreeState&);

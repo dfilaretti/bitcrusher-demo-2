@@ -24,7 +24,7 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 	noiseLabel.setText("Noise", dontSendNotification);
 	mixLabel.setText("Mix", dontSendNotification);
 	noiseTypeLabel.setText("Noise Type", dontSendNotification);
-	multiplyModeLabel.setText("Algo", dontSendNotification);
+	multiplyModeLabel.setText("Noise Algo", dontSendNotification);
 
 	addAndMakeVisible(bitsLabel);
 	addAndMakeVisible(rateLabel);
@@ -57,8 +57,7 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 	addAndMakeVisible(mixSlider);
 	mixSliderAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
 
-	setResizable(true, true);
-	setResizeLimits(400, 250, 800, 250);
+	setSize(400, 250);
 }
 
 BitCrusherAudioProcessorEditor::~BitCrusherAudioProcessorEditor()
@@ -93,9 +92,15 @@ void BitCrusherAudioProcessorEditor::resized()
 
 	auto noiseTypeRect = r.removeFromTop(paramControlHeight);
 	noiseTypeLabel.setBounds(noiseTypeRect.removeFromLeft(paramLabelWidth));
-	noiseTypeMenu.setBounds(noiseTypeRect);
+	auto noiseTypeComboBoxRect = noiseTypeRect.removeFromLeft(comboBoxWidth);
+	noiseTypeMenu.setBounds(
+		noiseTypeComboBoxRect.withSize(noiseTypeComboBoxRect.getWidth() * 0.8,
+			noiseTypeComboBoxRect.getHeight() * 0.8));
 
 	auto noiseAlgoRect = r.removeFromTop(paramControlHeight);
 	multiplyModeLabel.setBounds(noiseAlgoRect.removeFromLeft(paramLabelWidth));
-	multiplyModeMenu.setBounds(noiseAlgoRect);
+	auto noiseAlgoComboBoxRect = noiseAlgoRect.removeFromLeft(comboBoxWidth);
+	multiplyModeMenu.setBounds(
+		noiseAlgoComboBoxRect.withSize(noiseAlgoComboBoxRect.getWidth() * 0.8, 
+			                           noiseAlgoComboBoxRect.getHeight() * 0.8));
 }

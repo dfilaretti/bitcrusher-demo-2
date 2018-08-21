@@ -132,23 +132,16 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 		                             {},
 		                             NormalisableRange<float>(1, 2, 1), 
 		                             1,
-		                             useWhiteNoiseToText,
-		                             textToUseWhiteNoise);
+		                             nullptr,
+									 nullptr);
+	
 	parameters.createAndAddParameter("multiplyMode",
-		"Noise Multiply Mode",
-		{},
-		NormalisableRange<float>(1, 2, 1),
-		1,
-		nullptr,
-		nullptr);
-
-	/*parameters.createAndAddParameter("multiplyMode",
-		                             "Noise Multiply Mode",
-		                             {},
-		                             NormalisableRange<float>(0, 1, 1),
-		                             0,
-		                             multiplyModeToText,
-		                             textToMultiplyMode);*/
+									 "Noise Multiply Mode",
+									 {},
+									 NormalisableRange<float>(1, 2, 1),
+									 1,
+									 nullptr,
+									 nullptr);
 
 	parameters.state = ValueTree(Identifier("BitCrusher"));
 
@@ -156,32 +149,8 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 	rateParam = parameters.getRawParameterValue("rate");
 	bitsParam = parameters.getRawParameterValue("bits");
 	mixParam = parameters.getRawParameterValue("mix");
-	useWhiteNoiseParam = parameters.getRawParameterValue("useWhiteNoise");
-	multiplyModeParam = parameters.getRawParameterValue("multiplyMode");
-}
-
-String BitCrusherAudioProcessor::useWhiteNoiseToText(float value)
-{
-	return value < 0.5 ? "Off" : "On";
-}
-
-float BitCrusherAudioProcessor::textToUseWhiteNoise(const String& text)
-{
-	if (text == "Off") return 0.0f;
-	if (text == "On")  return 1.0f;
-	return 0.0f;
-}
-
-String BitCrusherAudioProcessor::multiplyModeToText(float value)
-{
-	return value < 0.5 ? "Add" : "Mul";
-}
-
-float BitCrusherAudioProcessor::textToMultiplyMode(const String& text)
-{
-	if (text == "Add") return 0.0f;
-	if (text == "Mul") return 1.0f;
-	return 0.0f;
+	noiseTypeParam = parameters.getRawParameterValue("useWhiteNoise");
+	noiseAlgoParam = parameters.getRawParameterValue("multiplyMode");
 }
 
 BitCrusherAudioProcessor::~BitCrusherAudioProcessor()
@@ -307,13 +276,13 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 	
 	// get params
 	float noiseAmt = -120 + 120 * (*noiseParam / 100); // dB
-	noiseAmt = jlimit<float>(-120, 0, noiseAmt);                   // limit (?)
-	noiseAmt = Decibels::decibelsToGain(noiseAmt);                 // dB to gain
+	noiseAmt = jlimit<float>(-120, 0, noiseAmt);       // limit (?)
+	noiseAmt = Decibels::decibelsToGain(noiseAmt);     // dB to gain
 	float bitDepth = *bitsParam;
 	int rateDivide = *rateParam;
 	float mix      = *mixParam;
-	int noiseType = *useWhiteNoiseParam;
-	int noiseAlgo = *multiplyModeParam;
+	int noiseType  = *noiseTypeParam;
+	int noiseAlgo  = *noiseAlgoParam;
 
 	// SAFETY CHECK :::: since some hosts will change buffer sizes without calling prepToPlay (Bitwig)
 	// NB: seems not just BitWig related - if not present, it always crash
@@ -324,7 +293,6 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 	}
 
 	// Make a copy of the current buffer, to use for processing
-
 	currentOutputBuffer.copyFrom(0, 0, buffer.getReadPointer(0), numSamples);
 	
 	if (buffer.getNumChannels() > 1) 
@@ -337,15 +305,18 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 		Array<float> noise; // TODO: do NOT init here!
 
 		// select noise type
+		// TODO: specify the numbers below as consts or enum
+		//       then use those instead of the magic numbers. 
+		//       NB: this should also affect `createAndAddParameter`
 		switch (noiseType) 
 		{
-			case 1:
+			case 1:  // WHITE noise
 				noise = getWhiteNoise(numSamples);
 				break;
-			case 2:
+			case 2:  // SIMPLE noise
 				noise = getSimpleNoise(numSamples);
 				break;
-			default:
+			default: // use WHITE noise by default
 				noise = getWhiteNoise(numSamples);
 		}
 
@@ -357,18 +328,21 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 		FloatVectorOperations::add(noiseBuffer.getWritePointer(0), noise.getRawDataPointer(), numSamples);
 		FloatVectorOperations::add(noiseBuffer.getWritePointer(1), noise.getRawDataPointer(), numSamples); // STEREO
 
+		// apply noise algo
+		// TODO: as for the Noise Type, use consts/enums instead of those ints!
 		switch (noiseAlgo)
 		{
-		case 1: // ADD - nothing to do
+		case 1:  // ADD - nothing to do
 			break;
-		case 2: // MUL - Multiply noise by signal (i.e. 0 signal -> 0 noise)
+		case 2:  // MUL - Multiply noise by signal (i.e. 0 signal -> 0 noise)
 			FloatVectorOperations::multiply(noiseBuffer.getWritePointer(0), currentOutputBuffer.getWritePointer(0), numSamples);
 			FloatVectorOperations::multiply(noiseBuffer.getWritePointer(1), currentOutputBuffer.getWritePointer(1), numSamples);
+		default: // use ADD as default (i.e. do nothing!) 
+			break;
 		}
 	}
 
 	// ADD NOISE to the incoming AUDIO ::::
-	// TODO: try out mul mode (see demo)
 	currentOutputBuffer.addFrom(0, 0, noiseBuffer.getReadPointer(0), numSamples);
 	currentOutputBuffer.addFrom(1, 0, noiseBuffer.getReadPointer(1), numSamples);
 
