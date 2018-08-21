@@ -37,13 +37,13 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 	addAndMakeVisible(noiseTypeMenu);
 	noiseTypeMenu.addItem("White", 1);
 	noiseTypeMenu.addItem("Simple", 2);
-	noiseTypeMenuAttachment.reset(new ComboBoxAttachment(valueTreeState, "useWhiteNoise", noiseTypeMenu));
+	noiseTypeMenuAttachment.reset(new ComboBoxAttachment(valueTreeState, "noiseType", noiseTypeMenu));
 
 	// setup noise algo combobox
 	addAndMakeVisible(multiplyModeMenu);
 	multiplyModeMenu.addItem("Add", 1);
 	multiplyModeMenu.addItem("Mul", 2);
-	multiplyModeMenuAttachment.reset(new ComboBoxAttachment(valueTreeState, "multiplyMode", multiplyModeMenu));
+	multiplyModeMenuAttachment.reset(new ComboBoxAttachment(valueTreeState, "noiseAlgo", multiplyModeMenu));
 
 	addAndMakeVisible(noiseSlider);
 	noiseSliderAttachment.reset(new SliderAttachment(valueTreeState, "noise", noiseSlider));
@@ -57,7 +57,7 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 	addAndMakeVisible(mixSlider);
 	mixSliderAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
 
-	setSize(400, 250);
+	setSize(400, 250); // TODO: use consts
 }
 
 BitCrusherAudioProcessorEditor::~BitCrusherAudioProcessorEditor()

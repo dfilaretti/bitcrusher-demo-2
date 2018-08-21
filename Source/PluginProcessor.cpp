@@ -94,7 +94,6 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 #endif
 {
 	// ----- Init params
-
 	parameters.createAndAddParameter("noise",                                // parameter ID
 		                             "Noise",                                // parameter name
 		                             String(),                               // parameter label (suffix)
@@ -127,16 +126,16 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 		                              nullptr,
 		                              nullptr);
 
-	parameters.createAndAddParameter("useWhiteNoise", 
-		                             "Use White Noise", 
+	parameters.createAndAddParameter("noiseType", 
+		                             "Noise Type", 
 		                             {},
 		                             NormalisableRange<float>(1, 2, 1), 
 		                             1,
 		                             nullptr,
 									 nullptr);
 	
-	parameters.createAndAddParameter("multiplyMode",
-									 "Noise Multiply Mode",
+	parameters.createAndAddParameter("noiseAlgo",
+									 "Noise Algo",
 									 {},
 									 NormalisableRange<float>(1, 2, 1),
 									 1,
@@ -149,8 +148,8 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 	rateParam = parameters.getRawParameterValue("rate");
 	bitsParam = parameters.getRawParameterValue("bits");
 	mixParam = parameters.getRawParameterValue("mix");
-	noiseTypeParam = parameters.getRawParameterValue("useWhiteNoise");
-	noiseAlgoParam = parameters.getRawParameterValue("multiplyMode");
+	noiseTypeParam = parameters.getRawParameterValue("noiseType");
+	noiseAlgoParam = parameters.getRawParameterValue("noiseAlgo");
 }
 
 BitCrusherAudioProcessor::~BitCrusherAudioProcessor()
