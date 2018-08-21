@@ -23,19 +23,27 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 	rateLabel.setText("Rate", dontSendNotification);
 	noiseLabel.setText("Noise", dontSendNotification);
 	mixLabel.setText("Mix", dontSendNotification);
+	noiseTypeLabel.setText("Noise Type", dontSendNotification);
+	multiplyModeLabel.setText("Algo", dontSendNotification);
 
 	addAndMakeVisible(bitsLabel);
 	addAndMakeVisible(rateLabel);
 	addAndMakeVisible(noiseLabel);
 	addAndMakeVisible(mixLabel);
+	addAndMakeVisible(noiseTypeLabel);
+	addAndMakeVisible(multiplyModeLabel);
 
-	useWhiteNoiseButton.setButtonText("White Noise");
-	addAndMakeVisible(useWhiteNoiseButton);
-	useWhiteNoiseButtonAttachment.reset(new ButtonAttachment(valueTreeState, "useWhiteNoise", useWhiteNoiseButton));
+	// setup noise type combobox
+	addAndMakeVisible(noiseTypeMenu);
+	noiseTypeMenu.addItem("White", 1);
+	noiseTypeMenu.addItem("Simple", 2);
+	noiseTypeMenuAttachment.reset(new ComboBoxAttachment(valueTreeState, "useWhiteNoise", noiseTypeMenu));
 
-	multiplyModeButton.setButtonText("Multiply noise");
-	addAndMakeVisible(multiplyModeButton);
-	multiplyModeButtonAttachment.reset(new ButtonAttachment(valueTreeState, "multiplyMode", multiplyModeButton));
+	// setup noise algo combobox
+	addAndMakeVisible(multiplyModeMenu);
+	multiplyModeMenu.addItem("Add", 1);
+	multiplyModeMenu.addItem("Mul", 2);
+	multiplyModeMenuAttachment.reset(new ComboBoxAttachment(valueTreeState, "multiplyMode", multiplyModeMenu));
 
 	addAndMakeVisible(noiseSlider);
 	noiseSliderAttachment.reset(new SliderAttachment(valueTreeState, "noise", noiseSlider));
@@ -83,6 +91,11 @@ void BitCrusherAudioProcessorEditor::resized()
 	mixLabel.setBounds(mixRect.removeFromLeft(paramLabelWidth));
 	mixSlider.setBounds(mixRect);
 
-	// useWhiteNoiseButton.setBounds(r.removeFromTop(paramControlHeight));
-	// multiplyModeButton.setBounds(r.removeFromTop(paramControlHeight));
+	auto noiseTypeRect = r.removeFromTop(paramControlHeight);
+	noiseTypeLabel.setBounds(noiseTypeRect.removeFromLeft(paramLabelWidth));
+	noiseTypeMenu.setBounds(noiseTypeRect);
+
+	auto noiseAlgoRect = r.removeFromTop(paramControlHeight);
+	multiplyModeLabel.setBounds(noiseAlgoRect.removeFromLeft(paramLabelWidth));
+	multiplyModeMenu.setBounds(noiseAlgoRect);
 }

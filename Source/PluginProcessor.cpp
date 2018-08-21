@@ -130,18 +130,25 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 	parameters.createAndAddParameter("useWhiteNoise", 
 		                             "Use White Noise", 
 		                             {},
-		                             NormalisableRange<float>(0.0f, 1.0f, 1.0f), 
-		                             0.0f,
-		                             useWhiteNoiseToText,    // value to text function
-		                             textToUseWhiteNoise);   // text to value function
-	
+		                             NormalisableRange<float>(1, 2, 1), 
+		                             1,
+		                             useWhiteNoiseToText,
+		                             textToUseWhiteNoise);
 	parameters.createAndAddParameter("multiplyMode",
+		"Noise Multiply Mode",
+		{},
+		NormalisableRange<float>(1, 2, 1),
+		1,
+		nullptr,
+		nullptr);
+
+	/*parameters.createAndAddParameter("multiplyMode",
 		                             "Noise Multiply Mode",
 		                             {},
-		                             NormalisableRange<float>(0.0f, 1.0f, 1.0f),
-		                             0.0f,
-		                             multiplyModeToText,    // value to text function
-		                             textToMultiplyMode);   // text to value function
+		                             NormalisableRange<float>(0, 1, 1),
+		                             0,
+		                             multiplyModeToText,
+		                             textToMultiplyMode);*/
 
 	parameters.state = ValueTree(Identifier("BitCrusher"));
 
@@ -305,8 +312,8 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 	float bitDepth = *bitsParam;
 	int rateDivide = *rateParam;
 	float mix      = *mixParam;
-	bool useWhiteNoise = *useWhiteNoiseParam;
-	bool multiplyMode = *multiplyModeParam;
+	int noiseType = *useWhiteNoiseParam;
+	int noiseAlgo = *multiplyModeParam;
 
 	// SAFETY CHECK :::: since some hosts will change buffer sizes without calling prepToPlay (Bitwig)
 	// NB: seems not just BitWig related - if not present, it always crash
@@ -328,11 +335,19 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 		noiseBuffer.clear();
 
 		Array<float> noise; // TODO: do NOT init here!
-		
-		if (useWhiteNoise)
-			noise = getWhiteNoise(numSamples);
-		else
-			noise = getSimpleNoise(numSamples);
+
+		// select noise type
+		switch (noiseType) 
+		{
+			case 1:
+				noise = getWhiteNoise(numSamples);
+				break;
+			case 2:
+				noise = getSimpleNoise(numSamples);
+				break;
+			default:
+				noise = getWhiteNoise(numSamples);
+		}
 
 		// range bound
 		noiseAmt = jlimit<float>(0, 1, noiseAmt);
@@ -342,10 +357,11 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 		FloatVectorOperations::add(noiseBuffer.getWritePointer(0), noise.getRawDataPointer(), numSamples);
 		FloatVectorOperations::add(noiseBuffer.getWritePointer(1), noise.getRawDataPointer(), numSamples); // STEREO
 
-		if (multiplyMode)
+		switch (noiseAlgo)
 		{
-			// MULTIPLY MODE :::::
-			// Multiply the noise by the signal ... so 0 signal -> 0 noise
+		case 1: // ADD - nothing to do
+			break;
+		case 2: // MUL - Multiply noise by signal (i.e. 0 signal -> 0 noise)
 			FloatVectorOperations::multiply(noiseBuffer.getWritePointer(0), currentOutputBuffer.getWritePointer(0), numSamples);
 			FloatVectorOperations::multiply(noiseBuffer.getWritePointer(1), currentOutputBuffer.getWritePointer(1), numSamples);
 		}

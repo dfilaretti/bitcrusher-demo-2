@@ -22,12 +22,13 @@ public:
 
 	typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
 	typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+	typedef AudioProcessorValueTreeState::ComboBoxAttachment ComboBoxAttachment;
 	
 	// UI params
 	enum
 	{
 		paramControlHeight = 40,
-		paramLabelWidth = 60,
+		paramLabelWidth = 100,
 		paramSliderWidth = 300
 	};
 
@@ -41,11 +42,12 @@ public:
 private:
 	AudioProcessorValueTreeState& valueTreeState;
 
-	// sliders
-	Label bitsLabel, 
-		  rateLabel, 
-		  noiseLabel, 
-		  mixLabel;
+	Label bitsLabel,
+		  rateLabel,
+		  noiseLabel,
+		  mixLabel,
+		  noiseTypeLabel,
+		  multiplyModeLabel;
 	
 	Slider bitsSlider, 
 		   rateSlider, 
@@ -57,11 +59,10 @@ private:
 		                              noiseSliderAttachment, 
 		                              mixSliderAttachment;
 	
-	// buttons
-	ToggleButton useWhiteNoiseButton, 
-		         multiplyModeButton;
-	std::unique_ptr<ButtonAttachment> useWhiteNoiseButtonAttachment, multiplyModeButtonAttachment;
-	
+	// combo boxes
+	ComboBox noiseTypeMenu, multiplyModeMenu;
+	std::unique_ptr<ComboBoxAttachment> noiseTypeMenuAttachment, multiplyModeMenuAttachment;
+
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     BitCrusherAudioProcessor& processor;
