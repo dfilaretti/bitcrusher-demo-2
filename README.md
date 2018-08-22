@@ -1,5 +1,6 @@
-# bitcrusher-tutorial-v2
-simple bitcrusher plugin written in JUCE
+# bitcrusher-demo-2
+
+Simple bitcrusher plugin written in JUCE
 
 ## Improvements and additions over initial tutorial 
 
