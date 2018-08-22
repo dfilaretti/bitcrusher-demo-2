@@ -8,5 +8,5 @@ Simple bitcrusher plugin written in JUCE
 * make use of `getStateInformation` and `getStateInformation` so that plugin state can be saved/restored by DAWs (e.g. when saving project then quiting and reloading)
 * added a "mix" slider, controlling dry/wet ratio 
 * added a "noise type" selector
-* added a "noise algorith" selector, to chose whether noise is added or multiplied with the original signal
+* added a "noise algorythm" selector, to chose whether noise is added or multiplied with the original signal
 * use `removeFromTop`, `removeFromLeft` & friend to build the GUI instead of fixed positions
