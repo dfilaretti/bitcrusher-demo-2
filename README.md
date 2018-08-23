@@ -10,3 +10,4 @@ Simple bitcrusher plugin written in JUCE
 * added a "noise type" selector
 * added a "noise algorythm" selector, to chose whether noise is added or multiplied with the original signal
 * use `removeFromTop`, `removeFromLeft` & friend to build the GUI instead of fixed positions
+* global gain control
