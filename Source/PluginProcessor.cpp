@@ -126,6 +126,14 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 		                              nullptr,
 		                              nullptr);
 
+	parameters.createAndAddParameter("gain",
+		"Gain",
+		{},
+		NormalisableRange<float>(0, 2),
+		1,
+		nullptr,
+		nullptr);
+
 	parameters.createAndAddParameter("noiseType", 
 		                             "Noise Type", 
 		                             {},
@@ -142,12 +150,14 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 									 nullptr,
 									 nullptr);
 
+
 	parameters.state = ValueTree(Identifier("BitCrusher"));
 
 	noiseParam = parameters.getRawParameterValue("noise");
 	rateParam = parameters.getRawParameterValue("rate");
 	bitsParam = parameters.getRawParameterValue("bits");
 	mixParam = parameters.getRawParameterValue("mix");
+	gainParam = parameters.getRawParameterValue("gain");
 	noiseTypeParam = parameters.getRawParameterValue("noiseType");
 	noiseAlgoParam = parameters.getRawParameterValue("noiseAlgo");
 }
@@ -280,6 +290,7 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 	float bitDepth = *bitsParam;
 	int rateDivide = *rateParam;
 	float mix      = *mixParam;
+	float gain     = *gainParam;
 	int noiseType  = *noiseTypeParam;
 	int noiseAlgo  = *noiseAlgoParam;
 
@@ -382,6 +393,11 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 		FloatVectorOperations::add(buffer.getWritePointer(0), currentOutputBuffer.getReadPointer(0), numSamples);
 		FloatVectorOperations::add(buffer.getWritePointer(1), currentOutputBuffer.getReadPointer(1), numSamples);
 	}
+
+	// Apply final GAIN
+	FloatVectorOperations::multiply(buffer.getWritePointer(0), gain, numSamples);
+	FloatVectorOperations::multiply(buffer.getWritePointer(1), gain, numSamples);
+
 }
 
 //==============================================================================

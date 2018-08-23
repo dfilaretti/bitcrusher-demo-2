@@ -66,6 +66,7 @@ private:
 	float* mixParam       = nullptr;
 	float* noiseTypeParam = nullptr;
 	float* noiseAlgoParam = nullptr;
+	float* gainParam      = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BitCrusherAudioProcessor)
 };

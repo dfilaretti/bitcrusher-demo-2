@@ -15,16 +15,24 @@
 BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioProcessor& p, AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 {
-	getLookAndFeel().setColour(Slider::trackColourId, Colours::orange);
-	getLookAndFeel().setColour(Slider::thumbColourId, Colours::yellowgreen);
+	/*getLookAndFeel().setColour(Slider::trackColourId, Colours::orange);
+	getLookAndFeel().setColour(Slider::thumbColourId, Colours::yellowgreen);*/
+
+	noiseSliderLookAndFeel.setColour(Slider::trackColourId, Colours::red);
+	bitsSliderLookAndFeel.setColour(Slider::trackColourId, Colours::orange);
+	rateSliderLookAndFeel.setColour(Slider::trackColourId, Colours::yellow);
+	mixSliderLookAndFeel.setColour(Slider::trackColourId, Colours::green);
+	gainSliderLookAndFeel.setColour(Slider::trackColourId, Colours::blue);
+
 
 	// setup labels
 	bitsLabel.setText("Bits", dontSendNotification);
+	mixLabel.setText("Mix", dontSendNotification);
 	rateLabel.setText("Rate", dontSendNotification);
 	noiseLabel.setText("Noise", dontSendNotification);
-	mixLabel.setText("Mix", dontSendNotification);
 	noiseTypeLabel.setText("Noise Type", dontSendNotification);
 	multiplyModeLabel.setText("Noise Algo", dontSendNotification);
+	gainLabel.setText("Gain", dontSendNotification);
 
 	addAndMakeVisible(bitsLabel);
 	addAndMakeVisible(rateLabel);
@@ -32,6 +40,7 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 	addAndMakeVisible(mixLabel);
 	addAndMakeVisible(noiseTypeLabel);
 	addAndMakeVisible(multiplyModeLabel);
+	addAndMakeVisible(gainLabel);
 
 	// setup noise type combobox
 	addAndMakeVisible(noiseTypeMenu);
@@ -47,15 +56,23 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 
 	addAndMakeVisible(noiseSlider);
 	noiseSliderAttachment.reset(new SliderAttachment(valueTreeState, "noise", noiseSlider));
+	noiseSlider.setLookAndFeel(&noiseSliderLookAndFeel);
 
 	addAndMakeVisible(bitsSlider);
 	bitsSliderAttachment.reset(new SliderAttachment(valueTreeState, "bits", bitsSlider));
+	bitsSlider.setLookAndFeel(&bitsSliderLookAndFeel);
 
 	addAndMakeVisible(rateSlider);
 	rateSliderAttachment.reset(new SliderAttachment(valueTreeState, "rate", rateSlider));
+	rateSlider.setLookAndFeel(&rateSliderLookAndFeel);
 
 	addAndMakeVisible(mixSlider);
 	mixSliderAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
+	mixSlider.setLookAndFeel(&mixSliderLookAndFeel);
+
+	addAndMakeVisible(gainSlider);
+	gainSliderAttachment.reset(new SliderAttachment(valueTreeState, "gain", gainSlider));
+	gainSlider.setLookAndFeel(&gainSliderLookAndFeel);
 
 	setSize(400, 250); // TODO: use consts
 }
@@ -89,18 +106,26 @@ void BitCrusherAudioProcessorEditor::resized()
 	auto mixRect = r.removeFromTop(paramControlHeight);
 	mixLabel.setBounds(mixRect.removeFromLeft(paramLabelWidth));
 	mixSlider.setBounds(mixRect);
+	
+	auto gainRect = r.removeFromTop(paramControlHeight);
+	gainLabel.setBounds(gainRect.removeFromLeft(paramLabelWidth));
+	gainSlider.setBounds(gainRect);
 
-	auto noiseTypeRect = r.removeFromTop(paramControlHeight);
+	auto menusRect = r.removeFromTop(paramControlHeight);
+
+	auto noiseTypeRect = menusRect.removeFromLeft(200);
 	noiseTypeLabel.setBounds(noiseTypeRect.removeFromLeft(paramLabelWidth));
 	auto noiseTypeComboBoxRect = noiseTypeRect.removeFromLeft(comboBoxWidth);
 	noiseTypeMenu.setBounds(
 		noiseTypeComboBoxRect.withSize(noiseTypeComboBoxRect.getWidth() * 0.8,
 			noiseTypeComboBoxRect.getHeight() * 0.8));
 
-	auto noiseAlgoRect = r.removeFromTop(paramControlHeight);
+	auto noiseAlgoRect = menusRect.removeFromTop(paramControlHeight);
 	multiplyModeLabel.setBounds(noiseAlgoRect.removeFromLeft(paramLabelWidth));
 	auto noiseAlgoComboBoxRect = noiseAlgoRect.removeFromLeft(comboBoxWidth);
 	multiplyModeMenu.setBounds(
 		noiseAlgoComboBoxRect.withSize(noiseAlgoComboBoxRect.getWidth() * 0.8, 
 			                           noiseAlgoComboBoxRect.getHeight() * 0.8));
+
+
 }

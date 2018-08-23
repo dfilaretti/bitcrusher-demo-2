@@ -43,22 +43,37 @@ public:
 private:
 	AudioProcessorValueTreeState& valueTreeState;
 
-	Label bitsLabel,
-		  rateLabel,
-		  noiseLabel,
-		  mixLabel,
-		  noiseTypeLabel,
-		  multiplyModeLabel;
+	Label 
+		bitsLabel,
+		rateLabel,
+		noiseLabel,
+		mixLabel,
+		gainLabel,
+		noiseTypeLabel,
+		multiplyModeLabel;
+
+	LookAndFeel_V4 
+		bitsSliderLookAndFeel,
+		rateSliderLookAndFeel,
+		noiseSliderLookAndFeel,
+		mixSliderLookAndFeel,
+		gainSliderLookAndFeel;
 	
-	Slider bitsSlider, 
-		   rateSlider, 
-		   noiseSlider, 
-		   mixSlider; 
+	Slider 
+		bitsSlider,
+		rateSlider,
+		noiseSlider,
+		mixSlider,
+		gainSlider;
 	
-	std::unique_ptr<SliderAttachment> bitsSliderAttachment, 
-		                              rateSliderAttachment, 
-		                              noiseSliderAttachment, 
-		                              mixSliderAttachment;
+	std::unique_ptr<SliderAttachment> 
+		bitsSliderAttachment,
+		rateSliderAttachment,
+		noiseSliderAttachment,
+		mixSliderAttachment,
+		gainSliderAttachment;
+
+
 	
 	// combo boxes
 	ComboBox noiseTypeMenu, multiplyModeMenu;
