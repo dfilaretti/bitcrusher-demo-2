@@ -2,14 +2,14 @@
 
 A simple bitcrusher plugin inspired by a tutorial by Aaron Leese (Stagecraft Software) and Joshua Hodge from the [The Audio Programmer](https://www.youtube.com/channel/UCpKb02FsH4WH4X_2xhIoJ1A/about). 
 
+![BitCrusher-Screenshot](screenshot.png)
+
 The plugin is the result of me following along with the tutorial and then trying to add a bunch of improvements and extra features in order to learn the basics of the [JUCE](https://juce.com/) framework. 
 
 If you are just getting started, I suggest taking a look at the original tutorial and code first: 
 
 * [Juce Tutorial 39- Bitcrusher Plugin Walkthrough with Aaron Leese (Stagecraft Software)](https://www.youtube.com/watch?v=1PLn8IAKEb4) 
 * [GitHub repo](https://github.com/theaudioprogrammer/bitcrusherDemo)
-
-![BitCrusher-Screenshot](screenshot.png)
 
 ## Plugin details/additions
 
