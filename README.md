@@ -13,6 +13,8 @@ If you are just getting started, I suggest taking a look at the original tutoria
 
 ## Plugin details/additions
 
+Here's a list of the main additions or changes that I made to the original tutorial code. 
+
 ### New Features
 
 * _mix_: controlling dry/wet ratio 
