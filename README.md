@@ -1,6 +1,6 @@
 # bitcrusher-demo-2
 
-Simple bitcrusher plugin written in JUCE
+![BitCrusher-Screenshot](bitcrusher-screenshot-shadow-1.png)
 
 ## Improvements and additions over initial tutorial 
 
