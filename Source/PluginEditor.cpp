@@ -15,15 +15,9 @@
 BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioProcessor& p, AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), processor (p), valueTreeState(vts)
 {
-	/*getLookAndFeel().setColour(Slider::trackColourId, Colours::orange);
-	getLookAndFeel().setColour(Slider::thumbColourId, Colours::yellowgreen);*/
-
-	noiseSliderLookAndFeel.setColour(Slider::trackColourId, Colours::red);
-	bitsSliderLookAndFeel.setColour(Slider::trackColourId, Colours::orange);
-	rateSliderLookAndFeel.setColour(Slider::trackColourId, Colours::yellow);
-	mixSliderLookAndFeel.setColour(Slider::trackColourId, Colours::green);
-	gainSliderLookAndFeel.setColour(Slider::trackColourId, Colours::blue);
-
+	// set slider colours, globally
+	getLookAndFeel().setColour(Slider::trackColourId, Colours::darkmagenta);
+	getLookAndFeel().setColour(Slider::thumbColourId, Colours::darkorange);
 
 	// setup labels
 	bitsLabel.setText("Bits", dontSendNotification);
@@ -56,23 +50,18 @@ BitCrusherAudioProcessorEditor::BitCrusherAudioProcessorEditor (BitCrusherAudioP
 
 	addAndMakeVisible(noiseSlider);
 	noiseSliderAttachment.reset(new SliderAttachment(valueTreeState, "noise", noiseSlider));
-	noiseSlider.setLookAndFeel(&noiseSliderLookAndFeel);
 
 	addAndMakeVisible(bitsSlider);
 	bitsSliderAttachment.reset(new SliderAttachment(valueTreeState, "bits", bitsSlider));
-	bitsSlider.setLookAndFeel(&bitsSliderLookAndFeel);
 
 	addAndMakeVisible(rateSlider);
 	rateSliderAttachment.reset(new SliderAttachment(valueTreeState, "rate", rateSlider));
-	rateSlider.setLookAndFeel(&rateSliderLookAndFeel);
 
 	addAndMakeVisible(mixSlider);
 	mixSliderAttachment.reset(new SliderAttachment(valueTreeState, "mix", mixSlider));
-	mixSlider.setLookAndFeel(&mixSliderLookAndFeel);
 
 	addAndMakeVisible(gainSlider);
 	gainSliderAttachment.reset(new SliderAttachment(valueTreeState, "gain", gainSlider));
-	gainSlider.setLookAndFeel(&gainSliderLookAndFeel);
 
 	setSize(400, 250); // TODO: use consts
 }

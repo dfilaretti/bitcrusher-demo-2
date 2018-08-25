@@ -28,7 +28,7 @@ public:
 	enum
 	{
 		paramControlHeight = 40,
-		paramLabelWidth = 100,
+		paramLabelWidth = 90,
 		paramSliderWidth = 300, 
 		comboBoxWidth = 100
 	};
@@ -51,13 +51,6 @@ private:
 		gainLabel,
 		noiseTypeLabel,
 		multiplyModeLabel;
-
-	LookAndFeel_V4 
-		bitsSliderLookAndFeel,
-		rateSliderLookAndFeel,
-		noiseSliderLookAndFeel,
-		mixSliderLookAndFeel,
-		gainSliderLookAndFeel;
 	
 	Slider 
 		bitsSlider,
