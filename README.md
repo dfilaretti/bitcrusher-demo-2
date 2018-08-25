@@ -1,6 +1,6 @@
 # bitcrusher-demo-2
 
-![BitCrusher-Screenshot](bitcrusher-screenshot-shadow-2.png)
+![BitCrusher-Screenshot](screenshot.png)
 
 ## Improvements and additions over initial tutorial 
 
