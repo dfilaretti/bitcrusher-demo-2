@@ -1,6 +1,6 @@
 # BitCrusher Demo (v2)
 
-A simple bitcrusher plugin inspired by a tutorial by Aaron Leese (Stagecraft Software) and Joshua Hodge from the [The Audio Programmer](https://www.youtube.com/channel/UCpKb02FsH4WH4X_2xhIoJ1A/about). 
+A simple bitcrusher plugin inspired by a [tutorial](https://www.youtube.com/watch?v=1PLn8IAKEb4) by [Aaron Leese](https://twitter.com/Stagecraft_SW) ([Stagecraft Software](http://www.stagecraftsoftware.com/)) and Joshua Hodge from the [The Audio Programmer](https://www.youtube.com/channel/UCpKb02FsH4WH4X_2xhIoJ1A/about). 
 
 ![BitCrusher-Screenshot](screenshot.png)
 
