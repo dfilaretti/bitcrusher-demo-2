@@ -4,7 +4,9 @@ A simple bitcrusher plugin inspired by a [tutorial](https://www.youtube.com/watc
 
 ![BitCrusher-Screenshot](screenshot.png)
 
-The plugin is the result of me following along with the tutorial and then trying to add a bunch of improvements and extra features in order to learn the basics of the [JUCE](https://juce.com/) framework. 
+([here is a video](https://www.youtube.com/watch?v=J3EUkRGO0v8) of the plugin in action inside Ableton Live 10)
+
+The plugin is the result of following along with the tutorial and then trying to add a bunch of improvements and extra features in order to learn the basics of the [JUCE](https://juce.com/) framework. 
 
 If you are just getting started, I suggest taking a look at the original tutorial and code first: 
 
