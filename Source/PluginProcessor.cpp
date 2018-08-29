@@ -103,36 +103,36 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 		                             nullptr);
 
 	parameters.createAndAddParameter("rate",
-		                             "Rate",                                 // parameter name
-		                             String(),                               // parameter label (suffix)
-		                             NormalisableRange<float>(1.0f, 50.0f),  // range
-		                             1.0f,                                   // default value
+		                             "Rate",
+		                             String(),
+		                             NormalisableRange<float>(1.0f, 50.0f),
+		                             1.0f,
 		                             nullptr,
 		                             nullptr);
 
-	parameters.createAndAddParameter("bits",                                 // parameter ID
-		                             "Bits",                                 // parameter name
-		                             String(),                               // parameter label (suffix)
-	 	                             NormalisableRange<float>(1.0f, 32.0f, 1.0f),  // range
-		                             32.0f,                                  // default value
+	parameters.createAndAddParameter("bits",
+		                             "Bits",
+		                             String(),
+	 	                             NormalisableRange<float>(1.0f, 32.0f, 1.0f),
+		                             32.0f,
 		                             nullptr,
 		                             nullptr);
 
-	parameters.createAndAddParameter("mix",                                   // parameter ID
-		                             "Mix",                                   // parameter name
-		                              String(),                               // parameter label (suffix)
-		                              NormalisableRange<float>(0.0f, 1.0f),   // range
-		                              1.0f,                                   // default value
+	parameters.createAndAddParameter("mix",
+		                             "Mix",
+		                              String(),
+		                              NormalisableRange<float>(0.0f, 1.0f),
+		                              1.0f,
 		                              nullptr,
 		                              nullptr);
 
 	parameters.createAndAddParameter("gain",
-		"Gain",
-		{},
-		NormalisableRange<float>(0, 2),
-		1,
-		nullptr,
-		nullptr);
+		                             "Gain",
+		                             {},
+	                                 NormalisableRange<float>(0, 2),
+		                             1,
+		                             nullptr,
+		                             nullptr);
 
 	parameters.createAndAddParameter("noiseType", 
 		                             "Noise Type", 
@@ -152,14 +152,13 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
 
 
 	parameters.state = ValueTree(Identifier("BitCrusher"));
-
-	noiseParam = parameters.getRawParameterValue("noise");
-	rateParam = parameters.getRawParameterValue("rate");
-	bitsParam = parameters.getRawParameterValue("bits");
-	mixParam = parameters.getRawParameterValue("mix");
-	gainParam = parameters.getRawParameterValue("gain");
-	noiseTypeParam = parameters.getRawParameterValue("noiseType");
-	noiseAlgoParam = parameters.getRawParameterValue("noiseAlgo");
+	noiseParam       = parameters.getRawParameterValue("noise");
+	rateParam        = parameters.getRawParameterValue("rate");
+	bitsParam        = parameters.getRawParameterValue("bits");
+	mixParam         = parameters.getRawParameterValue("mix");
+	gainParam        = parameters.getRawParameterValue("gain");
+	noiseTypeParam   = parameters.getRawParameterValue("noiseType");
+	noiseAlgoParam   = parameters.getRawParameterValue("noiseAlgo");
 }
 
 BitCrusherAudioProcessor::~BitCrusherAudioProcessor()

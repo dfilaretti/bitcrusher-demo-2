@@ -65,8 +65,6 @@ private:
 		noiseSliderAttachment,
 		mixSliderAttachment,
 		gainSliderAttachment;
-
-
 	
 	// combo boxes
 	ComboBox noiseTypeMenu, multiplyModeMenu;
