@@ -21,23 +21,26 @@ public:
     BitCrusherAudioProcessor();
     ~BitCrusherAudioProcessor();
 
-    //==============================================================================
+	//==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
+	//==============================================================================
    #ifndef JucePlugin_PreferredChannelConfigurations
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
 
+	//==============================================================================
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
 
     //==============================================================================
     AudioProcessorEditor* createEditor() override;
     bool hasEditor() const override;
 
-    //==============================================================================
+	//==============================================================================
     const String getName() const override;
 
+	//==============================================================================
     bool acceptsMidi() const override;
     bool producesMidi() const override;
     bool isMidiEffect() const override;
@@ -55,11 +58,11 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-    //==============================================================================
-
+	//==============================================================================
 	AudioSampleBuffer noiseBuffer, currentOutputBuffer;
 	AudioProcessorValueTreeState parameters;
 
+	//==============================================================================
 	float* noiseParam     = nullptr;
 	float* rateParam      = nullptr;
 	float* bitsParam      = nullptr;

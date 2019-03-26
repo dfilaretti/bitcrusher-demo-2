@@ -11,6 +11,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+//==============================================================================
 static Array<float> getSimpleNoise(int numSamples)
 {
 	Random r = Random::getSystemRandom();
@@ -264,6 +265,7 @@ bool BitCrusherAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 }
 #endif
 
+//==============================================================================
 void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     ScopedNoDenormals noDenormals;
@@ -396,7 +398,6 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 	// Apply final GAIN
 	FloatVectorOperations::multiply(buffer.getWritePointer(0), gain, numSamples);
 	FloatVectorOperations::multiply(buffer.getWritePointer(1), gain, numSamples);
-
 }
 
 //==============================================================================
