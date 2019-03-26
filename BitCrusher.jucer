@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="x6F400" name="BitCrusher" projectType="audioplug" jucerVersion="5.4.3"
-              pluginManufacturer="dfilaretti" splashScreenColour="Light" pluginFormats="buildStandalone,buildVST3"
-              aaxIdentifier="com.dfilaretti.bitcrusher" cppLanguageStandard="17">
+              pluginManufacturer="Daniele Filaretti" splashScreenColour="Light"
+              pluginFormats="buildStandalone,buildVST3" aaxIdentifier="com.danielefilaretti.bitcrusher"
+              cppLanguageStandard="17">
   <MAINGROUP id="AqRAyn" name="BitCrusher">
     <GROUP id="{DE53AF03-B5BA-5C62-54B6-6285C609DF16}" name="Source">
       <FILE id="eg2L0y" name="PluginProcessor.cpp" compile="1" resource="0"
