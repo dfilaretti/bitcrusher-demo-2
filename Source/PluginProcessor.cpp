@@ -19,7 +19,7 @@ static Array<float> getSimpleNoise(int numSamples)
 
 	for (int s = 0; s < numSamples; s++)
 	{
-		noise.add((r.nextFloat() - .5) * 2);
+		noise.add((r.nextFloat() - .5f) * 2.f);
 	}
 
 	return noise;
@@ -63,8 +63,8 @@ static Array<float> getWhiteNoise(int numSamples)
 				u2 = r.nextFloat();
 			} while (u1 <= epsilon);
 
-			z0 = sqrtf(-2.0 * logf(u1)) * cosf(2 * float(double_Pi) * u2);
-			z1 = sqrtf(-2.0 * logf(u1)) * sinf(2 * float(double_Pi) * u2);
+			z0 = sqrtf(-2.f * logf(u1)) * cosf(2.f * float_Pi * u2);
+			z1 = sqrtf(-2.f * logf(u1)) * sinf(2.f * float_Pi * u2);
 
 			output = z0 * sigma + mu;
 		}
@@ -82,7 +82,14 @@ static Array<float> getWhiteNoise(int numSamples)
 
 //==============================================================================
 BitCrusherAudioProcessor::BitCrusherAudioProcessor() 
-	: parameters(*this, nullptr)
+	: parameters(*this, nullptr, "BitCrusher", 
+		{ std::make_unique<AudioParameterFloat>("noise", "Noise", NormalisableRange<float>(0.0f, 100.0f), 0.0f),
+		  std::make_unique<AudioParameterFloat>("rate", "Rate", NormalisableRange<float>(1.0f, 50.0f), 1.0f),
+          std::make_unique<AudioParameterFloat>("bits", "Bits", NormalisableRange<float>(1.0f, 32.0f, 1.0f), 32.0f),
+          std::make_unique<AudioParameterFloat>("mix", "Mix", NormalisableRange<float>(0.0f, 1.0f), 1.0f),
+          std::make_unique<AudioParameterFloat>("gain", "Gain", NormalisableRange<float>(0.f, 2.f), 1.f),
+          std::make_unique<AudioParameterFloat>("noiseType", "Noise Type", NormalisableRange<float>(1.f, 2.f, 1.f), 1.f),
+          std::make_unique<AudioParameterFloat>("noiseAlgo", "Noise Algo", NormalisableRange<float>(1.f, 2.f, 1.f), 1.f) })
 #ifndef JucePlugin_PreferredChannelConfigurations
     , AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -94,65 +101,6 @@ BitCrusherAudioProcessor::BitCrusherAudioProcessor()
                        )
 #endif
 {
-	// ----- Init params
-	parameters.createAndAddParameter("noise",                                // parameter ID
-		                             "Noise",                                // parameter name
-		                             String(),                               // parameter label (suffix)
-		                             NormalisableRange<float>(0.0f, 100.0f), // range
-		                             0.0f,                                   // default value
-		                             nullptr,
-		                             nullptr);
-
-	parameters.createAndAddParameter("rate",
-		                             "Rate",
-		                             String(),
-		                             NormalisableRange<float>(1.0f, 50.0f),
-		                             1.0f,
-		                             nullptr,
-		                             nullptr);
-
-	parameters.createAndAddParameter("bits",
-		                             "Bits",
-		                             String(),
-	 	                             NormalisableRange<float>(1.0f, 32.0f, 1.0f),
-		                             32.0f,
-		                             nullptr,
-		                             nullptr);
-
-	parameters.createAndAddParameter("mix",
-		                             "Mix",
-		                              String(),
-		                              NormalisableRange<float>(0.0f, 1.0f),
-		                              1.0f,
-		                              nullptr,
-		                              nullptr);
-
-	parameters.createAndAddParameter("gain",
-		                             "Gain",
-		                             {},
-	                                 NormalisableRange<float>(0, 2),
-		                             1,
-		                             nullptr,
-		                             nullptr);
-
-	parameters.createAndAddParameter("noiseType", 
-		                             "Noise Type", 
-		                             {},
-		                             NormalisableRange<float>(1, 2, 1), 
-		                             1,
-		                             nullptr,
-									 nullptr);
-	
-	parameters.createAndAddParameter("noiseAlgo",
-									 "Noise Algo",
-									 {},
-									 NormalisableRange<float>(1, 2, 1),
-									 1,
-									 nullptr,
-									 nullptr);
-
-
-	parameters.state = ValueTree(Identifier("BitCrusher"));
 	noiseParam       = parameters.getRawParameterValue("noise");
 	rateParam        = parameters.getRawParameterValue("rate");
 	bitsParam        = parameters.getRawParameterValue("bits");
@@ -215,21 +163,21 @@ int BitCrusherAudioProcessor::getCurrentProgram()
     return 0;
 }
 
-void BitCrusherAudioProcessor::setCurrentProgram (int index)
+void BitCrusherAudioProcessor::setCurrentProgram (int /*index*/)
 {
 }
 
-const String BitCrusherAudioProcessor::getProgramName (int index)
+const String BitCrusherAudioProcessor::getProgramName (int /*index*/)
 {
     return {};
 }
 
-void BitCrusherAudioProcessor::changeProgramName (int index, const String& newName)
+void BitCrusherAudioProcessor::changeProgramName (int /*index*/, const String& /*newName*/)
 {
 }
 
 //==============================================================================
-void BitCrusherAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void BitCrusherAudioProcessor::prepareToPlay (double /*sampleRate*/, int /*samplesPerBlock*/)
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
@@ -266,7 +214,7 @@ bool BitCrusherAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 #endif
 
 //==============================================================================
-void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& /*midiMessages*/)
 {
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -288,12 +236,12 @@ void BitCrusherAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
 	float noiseAmt = -120 + 120 * (*noiseParam / 100); // dB
 	noiseAmt = jlimit<float>(-120, 0, noiseAmt);       // limit (?)
 	noiseAmt = Decibels::decibelsToGain(noiseAmt);     // dB to gain
-	float bitDepth = *bitsParam;
-	int rateDivide = *rateParam;
-	float mix      = *mixParam;
-	float gain     = *gainParam;
-	int noiseType  = *noiseTypeParam;
-	int noiseAlgo  = *noiseAlgoParam;
+	auto bitDepth = *bitsParam;
+	auto rateDivide = static_cast<int> (*rateParam);
+	auto mix      = *mixParam;
+	auto gain     = *gainParam;
+	auto noiseType  = static_cast<int> (*noiseTypeParam);
+	auto noiseAlgo  = static_cast<int> (*noiseAlgoParam);
 
 	// SAFETY CHECK :::: since some hosts will change buffer sizes without calling prepToPlay (Bitwig)
 	// NB: seems not just BitWig related - if not present, it always crash
